@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff version="1.1">
+<file>
+<body>
+    <!-- LEGENDS -->
+    <trans-unit id="tl_news_archive.churchdesk_legend">
+        <target>ChurchDesk</target>
+    </trans-unit>
+    <!-- FIELDS -->
+    <trans-unit id="tl_news_archive.churchdesk_enable.0">
+        <target>ChurchDesk-Import aktivieren</target>
+    </trans-unit>
+    <trans-unit id="tl_news_archive.churchdesk_enable.1">
+        <target>Aktiviert den Import für Blogbeiträge von ChurchDesk.</target>
+    </trans-unit>
+    <trans-unit id="tl_news_archive.churchdesk_categories.0">
+        <target>Kategorien</target>
+    </trans-unit>
+    <trans-unit id="tl_news_archive.churchdesk_categories.1">
+        <target>Bitte wählen Sie die Kategorien die in dieses Archiv importiert werden sollen.</target>
+    </trans-unit>
+</body>
+</file>
+</xliff>

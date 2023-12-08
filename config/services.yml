@@ -1,0 +1,37 @@
+services:
+    _defaults:
+        autoconfigure: true
+
+
+    numero2_churchdesk.api.churchdesk:
+        class: numero2\ChurchDeskBundle\API\ChurchDeskApi
+        public: true
+        arguments:
+            - '@http_client'
+            - '@cache.system'
+            - '%contao.churchdesk.api.organization_id%'
+            - '%contao.churchdesk.api.partner_token%'
+            - '@monolog.logger.contao.error'
+
+
+    numero2_churchdesk.import.calendar_events:
+        class: numero2\ChurchDeskBundle\Import\CalendarEventsImport
+        public: true
+        arguments:
+            - '@database_connection'
+            - '@numero2_churchdesk.api.churchdesk'
+            - '@logger'
+
+    numero2_churchdesk.import.news:
+        class: numero2\ChurchDeskBundle\Import\NewsImport
+        public: true
+        arguments:
+            - '@database_connection'
+            - '@numero2_churchdesk.api.churchdesk'
+            - '@logger'
+
+
+    numero2\ChurchDeskBundle\Cron\ImportChurchDeskCron:
+        arguments:
+            - '@numero2_churchdesk.import.calendar_events'
+            - '@numero2_churchdesk.import.news'

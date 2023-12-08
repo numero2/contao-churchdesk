@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff version="1.1">
+<file>
+<body>
+    <!-- OPERATIONS -->
+    <trans-unit id="tl_calendar_events.churchdesk_import.0">
+        <target>Importieren</target>
+    </trans-unit>
+    <trans-unit id="tl_calendar_events.churchdesk_import.1">
+        <target>Import für die Events von ChurchDesk starten.</target>
+    </trans-unit>
+</body>
+</file>
+</xliff>

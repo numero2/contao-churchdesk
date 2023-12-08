@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff version="1.1">
+<file>
+<body>
+    <!-- OPERATION -->
+    <trans-unit id="tl_news.churchdesk_import.0">
+        <target>Import</target>
+    </trans-unit>
+    <trans-unit id="tl_news.churchdesk_import.1">
+        <target>Trigger an import of blog entries from ChurchDesk.</target>
+    </trans-unit>
+</body>
+</file>
+</xliff>

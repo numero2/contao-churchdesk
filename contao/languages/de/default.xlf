@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff version="1.1">
+<file>
+<body>
+    <trans-unit id="churchdesk.msg.import_success">
+        <target>Einträge erfolgreich importiert. %d neue Einträge, %d aktualisiert.</target>
+    </trans-unit>
+    <trans-unit id="churchdesk.msg.import_error">
+        <target>Es gab ein Problem während des Imports der Einträge. Bitte schau in das System-Log.</target>
+    </trans-unit>
+</body>
+</file>
+</xliff>

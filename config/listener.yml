@@ -1,0 +1,29 @@
+services:
+    _defaults:
+        public: true
+
+    numero2_churchdesk.listener.data_container.calendar:
+        class: numero2\ChurchDeskBundle\EventListener\DataContainer\CalendarListener
+        arguments:
+            - '@numero2_churchdesk.api.churchdesk'
+
+    numero2_churchdesk.listener.data_container.calendar_events:
+        class: numero2\ChurchDeskBundle\EventListener\DataContainer\CalendarEventsListener
+        arguments:
+            - '@request_stack'
+            - '@contao.routing.scope_matcher'
+            - '@numero2_churchdesk.import.calendar_events'
+            - '@contao.translation.translator'
+
+    numero2_churchdesk.listener.data_container.news_archive:
+        class: numero2\ChurchDeskBundle\EventListener\DataContainer\NewsArchiveListener
+        arguments:
+            - '@numero2_churchdesk.api.churchdesk'
+
+    numero2_churchdesk.listener.data_container.news:
+        class: numero2\ChurchDeskBundle\EventListener\DataContainer\NewsListener
+        arguments:
+            - '@request_stack'
+            - '@contao.routing.scope_matcher'
+            - '@numero2_churchdesk.import.news'
+            - '@contao.translation.translator'
