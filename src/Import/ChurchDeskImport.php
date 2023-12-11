@@ -205,18 +205,21 @@ abstract class ChurchDeskImport {
         $filename = StringUtil::standardize($filename) .'.'. $fileext;
 
         $dest = $folder->dirname . '/' . $folder->basename . '/' . $filename;
-        file_put_contents($dest, file_get_contents($url));
+        $success = @file_put_contents($dest, file_get_contents($url));
 
-        $file = new File($folder->path . '/' . $filename);
+        if( $success ) {
 
-        $model = $file->getModel();
-        if( !$model ) {
-            Dbafs::addResource($folder->path . '/' . $filename);
-        }
+            $file = new File($folder->path . '/' . $filename);
 
-        $model = $file->getModel();
-        if( $model ) {
-            return $model->uuid;
+            $model = $file->getModel();
+            if( !$model ) {
+                Dbafs::addResource($folder->path . '/' . $filename);
+            }
+
+            $model = $file->getModel();
+            if( $model ) {
+                return $model->uuid;
+            }
         }
 
         return null;
