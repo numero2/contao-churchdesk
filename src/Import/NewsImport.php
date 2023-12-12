@@ -141,9 +141,9 @@ class NewsImport extends ChurchDeskImport{
 
         // set image
         $news->addImage = '';
-        if( !empty($new['image']['span4_16-9']) ) {
+        if( !empty($new['image']['16-9']) ) {
 
-            $uuid = self::downloadFileToDBAFS($new['image']['span4_16-9']);
+            $uuid = self::downloadFileToDBAFS($new['image']['16-9']);
 
             if( !empty($uuid) ) {
                 $news->addImage = '1';

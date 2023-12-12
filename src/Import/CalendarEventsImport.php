@@ -171,9 +171,9 @@ class CalendarEventsImport extends ChurchDeskImport{
 
         // set image
         $event->addImage = '';
-        if( !empty($new['image']['span4_16-9']) ) {
+        if( !empty($new['image']['16-9']) ) {
 
-            $uuid = self::downloadFileToDBAFS($new['image']['span4_16-9']);
+            $uuid = self::downloadFileToDBAFS($new['image']['16-9']);
 
             if( !empty($uuid) ) {
                 $event->addImage = '1';

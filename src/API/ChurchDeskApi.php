@@ -89,6 +89,8 @@ class ChurchDeskApi {
         foreach( $categories as $category ) {
             $params[] = 'cid[]='.$category;
         }
+        $params[] = 'imageFormat=16-9';
+
         $params[] = 'limit='.self::PAGE_SIZE;
         if( $page ) {
             $params[] = 'offset='.($page*self::PAGE_SIZE);
@@ -146,6 +148,8 @@ class ChurchDeskApi {
         if( !empty($categories) ) {
             $params[] = 'cid='.implode(',', $categories);
         }
+        $params[] = 'imageFormat=16-9';
+
         $params[] = 'itemsNumber='.self::PAGE_SIZE;
         if( $page ) {
             $params[] = 'pageMarker='.$page;
