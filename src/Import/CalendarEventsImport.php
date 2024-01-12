@@ -182,7 +182,7 @@ class CalendarEventsImport extends ChurchDeskImport{
         }
 
         // set content
-        if( !empty($new['body']) ) {
+        if( !empty($new['description']) ) {
 
             // make sure we have an id to work with
             if( !$event->id ) {
@@ -204,7 +204,7 @@ class CalendarEventsImport extends ChurchDeskImport{
             $content->tstamp = time();
             $content->type = 'text';
 
-            $content->text = $new['body'];
+            $content->text = $new['description'];
 
             $content->save();
         }
