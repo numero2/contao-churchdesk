@@ -158,12 +158,26 @@ class CalendarEventsImport extends ChurchDeskImport{
         $event->teaser = $new['summary'];
 
         $event->addTime = $new['allDay'] ? '' : '1';
-        $event->startDate = $event->startTime = strtotime($new['startDate']);
+        $event->startDate = strtotime($new['startDate']);
+        $event->endDate = $event->startTime;
+
         if( $event->addTime ) {
+
+            $event->startTime = strtotime($new['startDate']);
             $event->endTime = strtotime($new['endDate']);
+
+        } else {
+
+            $event->startTime = strtotime($new['startDate']);
+            $event->endTime = strtotime(date("Y-m-d", $event->startDate) . '23:59:59');
+
+            if( $event->endDate ) {
+                $event->endTime = strtotime(date("Y-m-d", $event->endDate) . '23:59:59');
+            }
         }
-        if( $new['showEndtime'] ) {
-            $event->endDate = $event->endTime;
+
+        if( !$new['showEndtime'] ) {
+            $event->endTime = $event->startTime;
         }
 
         $event->location = $new['locationName'];
