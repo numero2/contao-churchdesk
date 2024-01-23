@@ -15,6 +15,7 @@ namespace numero2\ChurchDeskBundle\Import;
 use Contao\CalendarEventsModel;
 use Contao\CalendarModel;
 use Contao\ContentModel;
+use Contao\Date;
 use Contao\StringUtil;
 use Contao\System;
 use numero2\ChurchDeskBundle\API\ChurchDeskApi;
@@ -157,27 +158,32 @@ class CalendarEventsImport extends ChurchDeskImport{
         $event->alias = $event->churchdesk_id.'-'.StringUtil::standardize($event->title);
         $event->teaser = $new['summary'];
 
-        $event->addTime = $new['allDay'] ? '' : '1';
-        $event->startDate = strtotime($new['startDate']);
+        $startDate = new Date(strtotime($new['startDate']));
+        $event->startDate = $startDate->dayBegin;
+        $event->startTime = $event->startDate;
 
-        $event->endDate = $event->startDate;
-        if( date("Y-m-d", $event->startDate) !== date("Y-m-d", strtotime($new['endDate'])) ) {
-            $event->endDate = strtotime($new['endDate']);
+        $endDate = new Date(strtotime($new['endDate']));
+        $event->endDate = $endDate->dayBegin;
+
+        if( $event->startDate === $event->endDate ) {
+            $event->endDate = null;
         }
 
+        $event->addTime = $new['allDay'] ? '' : '1';
         if( $event->addTime ) {
 
             $event->startTime = strtotime($new['startDate']);
-            $event->endTime = strtotime($new['endDate']);
+            $event->endTime = $event->startTime;
+
+            if( $new['showEndtime'] ) {
+                $event->endTime = strtotime($new['endDate']);
+            }
 
         } else {
 
-            $event->startTime = strtotime($new['startDate']);
-            $event->endTime = strtotime(date("Y-m-d", $event->endDate) . '23:59:59');
-        }
-
-        if( !$new['showEndtime'] ) {
-            $event->endTime = $event->startTime;
+            if( (strlen($event->endDate) && $event->endTime == $event->endTime) || $event->startTime == $event->endTime ) {
+                $event->endTime = (strtotime('+ 1 day', $event->endTime) - 1);
+            }
         }
 
         $event->location = $new['locationName'];
