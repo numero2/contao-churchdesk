@@ -10,19 +10,16 @@
  */
 
 
-namespace numero2\ChurchDeskBundle;
-
-use Symfony\Component\HttpKernel\Bundle\Bundle;
+namespace numero2\ChurchDeskBundle\Event;
 
 
-class ChurchDeskBundle extends Bundle {
+final class ChurchDeskEvents {
 
 
     /**
-     * {@inheritdoc}
+     * The contao.churchdesk_import_entry event is triggered during importing one ChurchDesk entry.
+     *
+     * @see numero2\ChurchDeskBundle\Event\ImportEntryEvent
      */
-    public function getPath(): string {
-
-        return \dirname(__DIR__);
-    }
+    public const IMPORT_ENTRY = 'contao.churchdesk_import_entry';
 }

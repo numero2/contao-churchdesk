@@ -11,7 +11,7 @@ Import news and events from [ChurchDesk](https://www.churchdesk.com/) as news in
 System requirements
 --
 
-* [Contao 4.13](https://github.com/contao/contao) (or newer)
+* [Contao 5.3](https://github.com/contao/contao) (or newer)
 
 Installation
 --
@@ -28,37 +28,27 @@ Configuration
           organization_id: 123
           partner_token: 'abc'
   ```
-* Configure the event calendar and or news archive 
+* Configure the event calendar and or news archive
 
 
-Hooks
+Events
 --
 
-By default the bundle only imports certain information from ChurchDesk. If you need more data you can import them on your own using the `parseChurchDeskEntry` hook:
+By default the bundle only imports certain information from ChurchDesk. If you need more data you can import them on your own using the `contao.churchdesk_import_entry` event:
 
 ```php
-// src/EventListener/ParseChurchDeskEntryListener.php
+// src/EventListener/ChurchDeskImportEntryListener.php
 namespace App\EventListener;
 
-use Contao\CoreBundle\ServiceAnnotation\Hook;
-use Contao\Model;
-use Contao\NewsModel;
-use Contao\CalendarEventsModel;
+use numero2\ChurchDeskBundle\Event\ChurchDeskEvents;
+use numero2\ChurchDeskBundle\Event\ImportEntryEvent;
+use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
 
-/**
- * @Hook("parseChurchDeskEntry")
- */
-class ParseChurchDeskEntryListener {
-    
-    public function __invoke( Model $model, array $apiData, bool $isUpdate ): void {
+#[AsEventListener(ChurchDeskEvents::IMPORT_ENTRY)]
+class ChurchDeskImportEntryListener {
 
-        if( $model instanceof CalendarEventsModel ) {
-            $model->something = $apiData->something;
-        }
-
-        if( $model instanceof NewsModel ) {
-            $model->anything = $apiData->anything;
-        }
+    public function __invoke( ImportEntryEvent $event ): void {
+         // …
     }
 }
 ```

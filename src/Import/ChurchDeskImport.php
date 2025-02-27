@@ -6,7 +6,7 @@
  * @author    Benny Born <benny.born@numero2.de>
  * @author    Michael Bösherz <michael.boesherz@numero2.de>
  * @license   Commercial
- * @copyright Copyright (c) 2023, numero2 - Agentur für digitales Marketing GbR
+ * @copyright Copyright (c) 2025, numero2 - Agentur für digitales Marketing GbR
  */
 
 
@@ -23,6 +23,7 @@ use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel;
 use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 
 abstract class ChurchDeskImport {
@@ -39,17 +40,22 @@ abstract class ChurchDeskImport {
     /**
      * @var Doctrine\DBAL\Connection
      */
-    protected $connection;
+    protected Connection $connection;
+
+    /**
+     * @var Symfony\Component\EventDispatcher\EventDispatcherInterface
+     */
+    protected EventDispatcherInterface $eventDispatcher;
 
     /**
      * @var numero2\ChurchDeskBundle\API\ChurchDeskApi
      */
-    protected $api;
+    protected ChurchDeskApi $api;
 
     /**
      * @var Psr\Log\LoggerInterface
      */
-    protected $logger;
+    protected LoggerInterface $logger;
 
     /**
      * @var array
@@ -67,9 +73,10 @@ abstract class ChurchDeskImport {
     protected $io;
 
 
-    public function __construct( Connection $connection, ChurchDeskApi $api, LoggerInterface $logger ) {
+    public function __construct( Connection $connection, EventDispatcherInterface $eventDispatcher, ChurchDeskApi $api, LoggerInterface $logger ) {
 
         $this->connection = $connection;
+        $this->eventDispatcher = $eventDispatcher;
         $this->api = $api;
         $this->logger = $logger;
 
@@ -102,7 +109,7 @@ abstract class ChurchDeskImport {
 
             if( $this->results[self::STATUS_ERROR] !== 0 ) {
 
-                $this->logger->log(LogLevel::ERROR, 'Failed to import ' .$this->results[self::STATUS_ERROR]. ' job advertisements for '. $identifier, ['contao' => new ContaoContext(__METHOD__, ContaoContext::ERROR)]);
+                $this->logger->log(LogLevel::ERROR, 'Failed to import ' .$this->results[self::STATUS_ERROR]. ' entries for '. $identifier, ['contao' => new ContaoContext(__METHOD__, ContaoContext::ERROR)]);
             }
 
             if( $this->results[self::STATUS_NEW] || $this->results[self::STATUS_UPDATE] ) {
@@ -163,7 +170,7 @@ abstract class ChurchDeskImport {
 
 
     /**
-     * Finish the progress bar ans print empty lines
+     * Finish the progress bar and print empty lines
      */
     protected function finishIOProgressBar(): void {
 

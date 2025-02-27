@@ -1,5 +1,6 @@
 services:
     _defaults:
+        autoconfigure: true
         public: true
 
     numero2_churchdesk.listener.data_container.calendar:

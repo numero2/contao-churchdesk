@@ -6,7 +6,7 @@
  * @author    Benny Born <benny.born@numero2.de>
  * @author    Michael Bösherz <michael.boesherz@numero2.de>
  * @license   Commercial
- * @copyright Copyright (c) 2023, numero2 - Agentur für digitales Marketing GbR
+ * @copyright Copyright (c) 2025, numero2 - Agentur für digitales Marketing GbR
  */
 
 
@@ -17,8 +17,9 @@ use Contao\CalendarModel;
 use Contao\ContentModel;
 use Contao\Date;
 use Contao\StringUtil;
-use Contao\System;
 use numero2\ChurchDeskBundle\API\ChurchDeskApi;
+use numero2\ChurchDeskBundle\Event\ChurchDeskEvents;
+use numero2\ChurchDeskBundle\Event\ImportEntryEvent;
 
 
 class CalendarEventsImport extends ChurchDeskImport{
@@ -29,7 +30,7 @@ class CalendarEventsImport extends ChurchDeskImport{
      */
     public function import(): void {
 
-        $calendars = CalendarModel::findBy(["churchdesk_enable=?"], ['1']);
+        $calendars = CalendarModel::findBy(["churchdesk_enable=?"], [1]);
 
         if( $calendars ) {
 
@@ -74,7 +75,7 @@ class CalendarEventsImport extends ChurchDeskImport{
 
                     if( !empty($event['parishes']) ) {
                         foreach( $event['parishes'] as $parish ) {
-                            if( in_array($parish['id'], $parishes) ){
+                            if( in_array($parish['id'], $parishes) ) {
                                 return true;
                             }
                         }
@@ -99,15 +100,15 @@ class CalendarEventsImport extends ChurchDeskImport{
 
             // initially hide all entries in current calendar to make sure
             // deleted entries are not shown anymore
-            $this->connection
-                ->prepare("UPDATE ".CalendarEventsModel::getTable()." SET published=:notpublished WHERE churchdesk_id!=:churchdesk AND published=:published AND pid=:pid")
-                ->execute([
-                    'notpublished' => '',
+            $this->connection->executeStatement(
+                "UPDATE ".CalendarEventsModel::getTable()." SET published=:notpublished WHERE churchdesk_id!=:churchdesk AND published=:published AND pid=:pid"
+            ,   [
+                    'notpublished' => 0,
                     'churchdesk' => 0,
                     'published' => 1,
                     'pid' => $calendar->id,
-                ])
-            ;
+                ]
+            );
 
             if( !array_key_exists(self::DATA_TOTAL, $this->results) ) {
                 $this->results[self::DATA_TOTAL] = 0;
@@ -148,7 +149,7 @@ class CalendarEventsImport extends ChurchDeskImport{
             $event->pid = $calendar->id;
             $event->churchdesk_id = $new['id'];
             $event->tstamp = time();
-            $event->published = '';
+            $event->published = 0;
         }
 
         $isUpdate = (bool) $event->id;
@@ -171,7 +172,7 @@ class CalendarEventsImport extends ChurchDeskImport{
             $event->endTime = $event->startDate;
         }
 
-        $event->addTime = $new['allDay'] ? '' : '1';
+        $event->addTime = $new['allDay'] ? 0 : 1;
         if( $event->addTime ) {
 
             $event->startTime = strtotime($new['startDate']);
@@ -184,7 +185,7 @@ class CalendarEventsImport extends ChurchDeskImport{
         } else {
 
             if( (strlen($event->endDate) && $event->endDate == $event->endTime) || $event->startTime == $event->endTime ) {
-                $event->endTime = (strtotime('+ 1 day', $event->endTime) - 1);
+                $event->endTime = (strtotime('+1 day', $event->endTime) - 1);
             }
         }
 
@@ -192,13 +193,13 @@ class CalendarEventsImport extends ChurchDeskImport{
         $event->address = $new['locationObj']['address'] ?? '';
 
         // set image
-        $event->addImage = '';
+        $event->addImage = 0;
         if( !empty($new['image']['16-9']) ) {
 
             $uuid = self::downloadFileToDBAFS($new['image']['16-9']);
 
             if( !empty($uuid) ) {
-                $event->addImage = '1';
+                $event->addImage = 1;
                 $event->singleSRC = $uuid;
             }
         }
@@ -233,13 +234,12 @@ class CalendarEventsImport extends ChurchDeskImport{
 
         $event->published = 1;
 
-        // HOOK: add custom logic
-        if( isset($GLOBALS['TL_HOOKS']['parseChurchDeskEntry']) && \is_array($GLOBALS['TL_HOOKS']['parseChurchDeskEntry']) ) {
+        // Event: add custom logic
+        $importEvent = new ImportEntryEvent($event, $new, $isUpdate);
+        $this->eventDispatcher->dispatch($importEvent, ChurchDeskEvents::IMPORT_ENTRY);
 
-            foreach( $GLOBALS['TL_HOOKS']['parseChurchDeskEntry'] as $callback ) {
-                System::importStatic($callback[0])->{$callback[1]}($event, $new, $isUpdate);
-            }
-        }
+        $event = $importEvent->getModel();
+        $isUpdate = $importEvent->getIsUpdate();
 
         $event->save();
 

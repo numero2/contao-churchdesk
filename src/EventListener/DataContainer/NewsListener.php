@@ -6,15 +6,16 @@
  * @author    Benny Born <benny.born@numero2.de>
  * @author    Michael Bösherz <michael.boesherz@numero2.de>
  * @license   Commercial
- * @copyright Copyright (c) 2023, numero2 - Agentur für digitales Marketing GbR
+ * @copyright Copyright (c) 2025, numero2 - Agentur für digitales Marketing GbR
  */
 
 
 namespace numero2\ChurchDeskBundle\EventListener\DataContainer;
 
+use Contao\ArrayUtil;
 use Contao\Controller;
+use Contao\CoreBundle\DependencyInjection\Attribute\AsCallback;
 use Contao\CoreBundle\Routing\ScopeMatcher;
-use Contao\CoreBundle\ServiceAnnotation\Callback;
 use Contao\DataContainer;
 use Contao\Input;
 use Contao\Message;
@@ -63,9 +64,8 @@ class NewsListener {
      * Adds an operation to manually start the import
      *
      * @param Contao\DataContainer $dc
-     *
-     * @Callback(table="tl_news", target="config.onload")
      */
+    #[AsCallback('tl_news', target:'config.onload')]
     public function addImportOperation( DataContainer $dc ): void {
 
         if( !$dc->id ) {
@@ -77,7 +77,7 @@ class NewsListener {
 
         if( $archive && $archive->churchdesk_enable ) {
 
-            array_insert($GLOBALS['TL_DCA']['tl_news']['list']['global_operations'], 1, [
+            ArrayUtil::arrayInsert($GLOBALS['TL_DCA']['tl_news']['list']['global_operations'], 1, [
                 'churchdesk_import' => [
                     'label'     => &$GLOBALS['TL_LANG']['tl_news']['churchdesk_import']
                 ,   'href'      => 'key=churchdesk_import'

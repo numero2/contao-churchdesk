@@ -6,7 +6,7 @@
  * @author    Benny Born <benny.born@numero2.de>
  * @author    Michael Bösherz <michael.boesherz@numero2.de>
  * @license   Commercial
- * @copyright Copyright (c) 2023, numero2 - Agentur für digitales Marketing GbR
+ * @copyright Copyright (c) 2025, numero2 - Agentur für digitales Marketing GbR
  */
 
 
@@ -28,7 +28,7 @@ $GLOBALS['TL_DCA']['tl_news_archive']['fields']['churchdesk_enable'] = [
 ,   'inputType'    => 'checkbox'
 ,   'filter'       => true
 ,   'eval'         => ['submitOnChange'=>true]
-,   'sql'          => "char(1) NOT NULL default ''"
+,   'sql'          => ['type'=>'boolean', 'default'=>false]
 ];
 
 $GLOBALS['TL_DCA']['tl_news_archive']['fields']['churchdesk_categories'] = [

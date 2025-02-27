@@ -6,7 +6,7 @@
  * @author    Benny Born <benny.born@numero2.de>
  * @author    Michael Bösherz <michael.boesherz@numero2.de>
  * @license   Commercial
- * @copyright Copyright (c) 2023, numero2 - Agentur für digitales Marketing GbR
+ * @copyright Copyright (c) 2025, numero2 - Agentur für digitales Marketing GbR
  */
 
 
@@ -16,6 +16,7 @@ use Contao\CoreBundle\Framework\FrameworkAwareInterface;
 use Contao\CoreBundle\Framework\FrameworkAwareTrait;
 use numero2\ChurchDeskBundle\Import\CalendarEventsImport;
 use numero2\ChurchDeskBundle\Import\NewsImport;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -23,13 +24,13 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
 
+#[AsCommand(
+    name: 'contao:churchdesk:import',
+    description: 'Peforms an import of the needed data from ChurchDesk',
+)]
 class ImportChurchDeskCommand extends Command implements FrameworkAwareInterface {
 
     use FrameworkAwareTrait;
-
-
-    protected static $defaultName = 'contao:churchdesk:import';
-    protected static $defaultDescription = 'Peforms an import of the needed data from ChurchDesk';
 
 
     /**
@@ -65,7 +66,7 @@ class ImportChurchDeskCommand extends Command implements FrameworkAwareInterface
 
         set_time_limit(0);
 
-        // init the contao framework as we use he contao models
+        // init the contao framework as we use the contao models
         $this->framework->initialize();
 
         $io = new SymfonyStyle($input, $output);
