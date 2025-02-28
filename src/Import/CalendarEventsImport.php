@@ -189,7 +189,7 @@ class CalendarEventsImport extends ChurchDeskImport{
             }
         }
 
-        $event->location = $new['locationName'];
+        $event->location = $new['locationName'] ?? '';
         $event->address = $new['locationObj']['address'] ?? '';
 
         // set image

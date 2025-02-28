@@ -12,14 +12,12 @@
 
 namespace numero2\ChurchDeskBundle\Cron;
 
-use Contao\CoreBundle\ServiceAnnotation\CronJob;
+use Contao\CoreBundle\DependencyInjection\Attribute\AsCronJob;
 use numero2\ChurchDeskBundle\Import\CalendarEventsImport;
 use numero2\ChurchDeskBundle\Import\NewsImport;
 
 
-/**
- * @CronJob("daily")
- */
+#[AsCronJob('daily')]
 class ImportChurchDeskCron {
 
 
@@ -39,6 +37,7 @@ class ImportChurchDeskCron {
         $this->importerEvents = $importerEvents;
         $this->importerNews = $importerNews;
     }
+
 
     public function __invoke(): void {
 

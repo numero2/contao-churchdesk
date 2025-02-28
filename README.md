@@ -48,7 +48,7 @@ use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
 class ChurchDeskImportEntryListener {
 
     public function __invoke( ImportEntryEvent $event ): void {
-         // …
+        // …
     }
 }
 ```
