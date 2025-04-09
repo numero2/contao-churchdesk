@@ -12,8 +12,6 @@
 
 namespace numero2\ChurchDeskBundle\Command;
 
-use Contao\CoreBundle\Framework\FrameworkAwareInterface;
-use Contao\CoreBundle\Framework\FrameworkAwareTrait;
 use numero2\ChurchDeskBundle\Import\CalendarEventsImport;
 use numero2\ChurchDeskBundle\Import\NewsImport;
 use Symfony\Component\Console\Attribute\AsCommand;
@@ -28,9 +26,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
     name: 'contao:churchdesk:import',
     description: 'Peforms an import of the needed data from ChurchDesk',
 )]
-class ImportChurchDeskCommand extends Command implements FrameworkAwareInterface {
-
-    use FrameworkAwareTrait;
+class ImportChurchDeskCommand extends Command {
 
 
     /**
@@ -65,9 +61,6 @@ class ImportChurchDeskCommand extends Command implements FrameworkAwareInterface
     protected function execute( InputInterface $input, OutputInterface $output ): int {
 
         set_time_limit(0);
-
-        // init the contao framework as we use the contao models
-        $this->framework->initialize();
 
         $io = new SymfonyStyle($input, $output);
         $this->importerEvents->setIO($output);

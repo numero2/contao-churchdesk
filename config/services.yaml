@@ -3,6 +3,11 @@ services:
         autowire: true
         autoconfigure: true
 
+    _instanceof:
+        Contao\CoreBundle\Framework\FrameworkAwareInterface:
+            calls:
+                - [setFramework, ['@contao.framework']]
+
 
     numero2_churchdesk.api.churchdesk:
         class: numero2\ChurchDeskBundle\API\ChurchDeskApi

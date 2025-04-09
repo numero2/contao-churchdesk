@@ -26,9 +26,12 @@ class CalendarEventsImport extends ChurchDeskImport{
 
 
     /**
-     * Imports events from all configured calendars
+     * {@inheritdoc}
      */
     public function import(): void {
+
+        // init the contao framework as we use the contao models
+        $this->framework->initialize();
 
         $calendars = CalendarModel::findBy(["churchdesk_enable=?"], [1]);
 

@@ -25,9 +25,12 @@ class NewsImport extends ChurchDeskImport{
 
 
     /**
-     * Imports news from all configured archives
+     * {@inheritdoc}
      */
     public function import(): void {
+
+        // init the contao framework as we use the contao models
+        $this->framework->initialize();
 
         $archives = NewsArchiveModel::findBy(["churchdesk_enable=?"], [true]);
 

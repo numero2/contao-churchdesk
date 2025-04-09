@@ -12,6 +12,8 @@
 
 namespace numero2\ChurchDeskBundle\Import;
 
+use Contao\CoreBundle\Framework\FrameworkAwareInterface;
+use Contao\CoreBundle\Framework\FrameworkAwareTrait;
 use Contao\CoreBundle\Monolog\ContaoContext;
 use Contao\Dbafs;
 use Contao\File;
@@ -26,7 +28,9 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 
-abstract class ChurchDeskImport {
+abstract class ChurchDeskImport implements FrameworkAwareInterface {
+
+    use FrameworkAwareTrait;
 
 
     /**

@@ -2,11 +2,6 @@ services:
     _defaults:
         autoconfigure: true
 
-    _instanceof:
-        Contao\CoreBundle\Framework\FrameworkAwareInterface:
-            calls:
-                - [setFramework, ['@contao.framework']]
-
 
     numero2_churchdesk.command.import_churchdesk:
         class: numero2\ChurchDeskBundle\Command\ImportChurchDeskCommand
